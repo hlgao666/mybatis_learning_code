@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="allen.dao.BlogMapper">
+
+    <!-- 在当前Mapper.xml中开启缓存-->
+    <cache/>
+
+    <insert id="addBlog" parameterType="blog">
+        insert into mybatis02.blog(id, title, author, create_time, views)
+        VALUES (#{id}, #{title}, #{author}, #{createTime}, #{views});
+    </insert>
+
+    <!--    提高代码复用-->
+    <sql id="if-title-author">
+        <if test="title != null">
+            and title = #{title}
+        </if>
+        <if test="author != null">
+            and author = #{author}
+        </if>
+    </sql>
+
+    <!--    根据不同查询条件查询-->
+<!--    where 元素只会在子元素返回任何内容的情况下才插入 “WHERE” 子句。而且，若子句的开头为 “AND” 或 “OR”，where 元素也会将它们去除。-->
+    <select id="queryBlogIF" parameterType="map" resultType="blog">
+        select * from blog
+        <where>
+            <!--    包含引用sql语句 -->
+            <include refid="if-title-author"></include>
+        </where>
+    </select>
+
+    <!--    choose-when 相当于java中的 switch-case-->
+    <select id="queryBlogChoose" parameterType="map" resultType="Blog">
+        select * from blog
+        <where>
+        <choose>
+            <when test="title != null">
+                and title = #{title}
+            </when>
+            <when test="author != null">
+                and author = #{author}
+            </when>
+            <otherwise>
+                views = #{views}
+            </otherwise>
+        </choose>
+        </where>
+    </select>
+
+    <!--    foreach查询-->
+    <!--    select * from blog where 1=1 and (id=1 or id=2 or id=3)-->
+    <select id="queryBlogForeach" parameterType="map" resultType="blog">
+        select * from blog
+        <where>
+            <foreach collection="ids" item="id" open="and (" close=")" separator="or">
+                id=#{id}
+            </foreach>
+        </where>
+    </select>
+
+</mapper>

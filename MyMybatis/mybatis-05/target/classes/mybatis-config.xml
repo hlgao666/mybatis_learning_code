@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <!--    引入外部配置文件-->
+    <properties resource="db.properties"/>
+
+    <!-- log output -->
+    <settings>
+        <!--        开启日志记录-->
+        <setting name="logImpl" value="LOG4J"/>
+        <!-- 驼峰命名转换  CamelCase 映射-->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <!--  显式地开启全局缓存-->
+        <setting name="cacheEnabled" value="true"/>
+    </settings>
+
+    <!--    可以给实体类起别名-->
+    <typeAliases>
+        <!--        <typeAlias type="com.allen.pojo.User" alias="User"/>  -->
+        <package name="allen.pojo"/>        <!-- 将该包下 allen.pojo.User 实体类名称 变为 user -->
+    </typeAliases>
+
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="${driver}"/>
+                <property name="url" value="${url}"/>
+                <property name="username" value="${username}"/>
+                <property name="password" value="${password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <mappers>
+        <mapper class="allen.dao.BlogMapper"/>
+    </mappers>
+
+</configuration>

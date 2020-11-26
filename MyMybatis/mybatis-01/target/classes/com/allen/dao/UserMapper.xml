@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.allen.dao.UserMapper">
+
+    <select id="getUserList" resultType="user">
+        select * from user
+    </select>
+
+    <update id="updateUser" parameterType="map">
+        update mybatis02.user
+        set username=#{username}, password=#{password}
+        where id = #{id};
+    </update>
+
+    <insert id="insertUser" parameterType="map">
+        insert into mybatis02.user(id, username, password) VALUES (#{id},#{username},#{password});
+    </insert>
+
+    <select id="getPageList" parameterType="map" resultType="user">
+        select * from mybatis02.user limit #{startIndex}, #{pageSize};
+    </select>
+
+</mapper>
